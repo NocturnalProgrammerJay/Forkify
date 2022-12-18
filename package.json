@@ -1,9 +1,9 @@
 {
-  "name": "forkify",
+  "name": "Forkify",
   "version": "1.0.0",
   "description": "Recipe Application",
   "scripts": {
-    "start": "parcel index.html",
+    "start": "parcel starter/index.html",
     "build": "parcel build index.html"
   },
   "repository": {
@@ -20,6 +20,7 @@
     "sass": "^1.26.10"
   },
   "devDependencies": {
+    "@parcel/transformer-image": "^2.0.0-rc.0",
     "@parcel/transformer-sass": "^2.8.2",
     "parcel": "^2.0.0-rc.0"
   }
