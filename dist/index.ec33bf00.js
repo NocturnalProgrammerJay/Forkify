@@ -562,7 +562,7 @@ const controlRecipes = async function() {
         // 2) Rendering recipe
         (0, _recipeViewJsDefault.default).render(_modelJs.state.recipe);
     } catch (err) {
-        console.log(err);
+        (0, _recipeViewJsDefault.default).renderError();
     }
 };
 const init = function() {
@@ -570,7 +570,7 @@ const init = function() {
 };
 init();
 
-},{"core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX","./model.js":"aa1aw","./view/recipeView.js":"a9CmW","regenerator-runtime/runtime":"dXNgZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gSXXb":[function(require,module,exports) {
+},{"core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX","regenerator-runtime/runtime":"dXNgZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./model.js":"aa1aw","./view/recipeView.js":"a9CmW"}],"gSXXb":[function(require,module,exports) {
 var global = require("af6fcc9698217404");
 var DESCRIPTORS = require("efe61d25de88db7b");
 var defineBuiltInAccessor = require("dea6a49a91ffd316");
@@ -1777,47 +1777,7 @@ $({
     setImmediate: setImmediate
 });
 
-},{"43cd7c86d502c793":"dIGt4","b4476767e8f65ae9":"i8HOC","64972ee40a39a011":"7jDg7"}],"aa1aw":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "state", ()=>state);
-parcelHelpers.export(exports, "loadRecipe", ()=>loadRecipe);
-var _regeneratorRuntime = require("regenerator-runtime");
-var _configJs = require("./config.js");
-var _helpersJs = require("./helpers.js");
-const state = {
-    recipe: {}
-};
-const loadRecipe = async function(id) {
-    try {
-        const data = await (0, _helpersJs.getJSON)(`${(0, _configJs.API_URL)}/${id}`);
-        const { recipe  } = data.data;
-        //formatting recipe to get rid of underscores.
-        state.recipe = {
-            id: recipe.id,
-            title: recipe.title,
-            publisher: recipe.publisher,
-            sourceUrl: recipe.source_url,
-            image: recipe.image_url,
-            serving: recipe.servings,
-            cookingTime: recipe.cooking_time,
-            ingredients: recipe.ingredients
-        };
-        console.log(state.recipe);
-    } catch (err) {
-        alert(err);
-    }
-} // API -  https://forkify-api.herokuapp.com/v2
- //bash terminal - npm i core-js regenerator-runtime        
- //NOTES:
- //https://forkify-api.herokuapp.com/api/v2/recipes?search=pizza
- //route = forkify-api.herokuapp.com/api/v2/recipes
- // \? query search
- //query string = search. This the variable and pizza is the value
- // sub out 'search=pizza' and insert a id and it will give us the data of that id pizza ingredients. In the background ?search= id
-;
-
-},{"regenerator-runtime":"dXNgZ","./config.js":"70DKu","./helpers.js":"5MiOq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dXNgZ":[function(require,module,exports) {
+},{"43cd7c86d502c793":"dIGt4","b4476767e8f65ae9":"i8HOC","64972ee40a39a011":"7jDg7"}],"dXNgZ":[function(require,module,exports) {
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
@@ -2404,16 +2364,7 @@ try {
     else Function("r", "regeneratorRuntime = r")(runtime);
 }
 
-},{}],"70DKu":[function(require,module,exports) {
-//constants and reused across project
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "API_URL", ()=>API_URL);
-parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
-const API_URL = "https://forkify-api.herokuapp.com/api/v2/recipes";
-const TIMEOUT_SEC = 10;
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+},{}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -2443,7 +2394,57 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"5MiOq":[function(require,module,exports) {
+},{}],"aa1aw":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "state", ()=>state);
+parcelHelpers.export(exports, "loadRecipe", ()=>loadRecipe);
+var _regeneratorRuntime = require("regenerator-runtime");
+var _configJs = require("./config.js");
+var _helpersJs = require("./helpers.js");
+const state = {
+    recipe: {}
+};
+const loadRecipe = async function(id) {
+    try {
+        const data = await (0, _helpersJs.getJSON)(`${(0, _configJs.API_URL)}/${id}`);
+        const { recipe  } = data.data;
+        //formatting recipe to get rid of underscores.
+        state.recipe = {
+            id: recipe.id,
+            title: recipe.title,
+            publisher: recipe.publisher,
+            sourceUrl: recipe.source_url,
+            image: recipe.image_url,
+            serving: recipe.servings,
+            cookingTime: recipe.cooking_time,
+            ingredients: recipe.ingredients
+        };
+        console.log(state.recipe);
+    } catch (err) {
+        console.error(`${err}💥💥💥`);
+        throw err;
+    }
+} // API -  https://forkify-api.herokuapp.com/v2
+ //bash terminal - npm i core-js regenerator-runtime        
+ //NOTES:
+ //https://forkify-api.herokuapp.com/api/v2/recipes?search=pizza
+ //route = forkify-api.herokuapp.com/api/v2/recipes
+ // \? query search
+ //query string = search. This the variable and pizza is the value
+ // sub out 'search=pizza' and insert a id and it will give us the data of that id pizza ingredients. In the background ?search= id
+;
+
+},{"regenerator-runtime":"dXNgZ","./config.js":"70DKu","./helpers.js":"5MiOq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"70DKu":[function(require,module,exports) {
+//constants and reused across project
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "API_URL", ()=>API_URL);
+parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
+const API_URL = "https://forkify-api.herokuapp.com/api/v2/recipes";
+const TIMEOUT_SEC = 10;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5MiOq":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getJSON", ()=>getJSON);
@@ -2471,7 +2472,7 @@ const getJSON = async function(url) {
     }
 };
 
-},{"./config.js":"70DKu","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","regenerator-runtime":"dXNgZ"}],"a9CmW":[function(require,module,exports) {
+},{"regenerator-runtime":"dXNgZ","./config.js":"70DKu","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"a9CmW":[function(require,module,exports) {
 // for images or sound files, write url:
 // because our code is in the dist folder js doesn't know about the old img path, so we import icons into this module
 // '../' goes up one folder
@@ -2482,6 +2483,8 @@ var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 var _fractional = require("fractional");
 class RecipeView {
     #parentElement = document.querySelector(".recipe");
+    #errorMessage = "We could not find that recipe. Please try another one!";
+    #message = "";
     #data;
     render(data) {
         this.#data = data;
@@ -2500,9 +2503,37 @@ class RecipeView {
             </svg>
           </div>
         `;
-        this.#parentElement.innerHTML = "";
+        this.#clear();
         this.#parentElement.insertAdjacentHTML("afterbegin", markup);
     };
+    renderError(message = this.#errorMessage) {
+        const markup = `
+      <div class="error">
+        <div>
+          <svg>
+            <use href="${(0, _iconsSvgDefault.default)}#icon-alert-triangle"></use>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div>
+      `;
+        this.#clear();
+        this.#parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    renderMessage(message = this.#message) {
+        const markup = `
+        <div class="message">
+          <div>
+            <svg>
+              <use href="${(0, _iconsSvgDefault.default)}#icon-smile"></use>
+            </svg>
+          </div>
+          <p>${message}</p>
+        </div>
+        `;
+        this.#clear();
+        this.#parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
     //This is the publisher function
     addHandlerRender(handler) {
         const start = [
