@@ -1,12 +1,15 @@
 import { async } from 'regenerator-runtime'
-import  {API_URL}  from './config.js'
+import  {API_URL, RES_PER_PAGE}  from './config.js'
 import {getJSON} from './helpers.js'
 
 export const state = {
     recipe: {},
     search: {
       query: '',
-      results: [],
+      results: [], //contains all the search results
+      resultsPerPage: RES_PER_PAGE,
+      page: 1,
+
     }
 }
 
@@ -28,7 +31,6 @@ export const loadRecipe = async function(id){
         cookingTime: recipe.cooking_time,
         ingredients: recipe.ingredients
       }
-      console.log(state.recipe);
     }catch(err){
         console.error(`${err}💥💥💥`)
         throw err
@@ -39,8 +41,8 @@ export const loadSearchResults = async function(query){
   try{
     state.search.query = query
 
+    //user searches query word, searches (?search=) for query in the object title
     const data = await getJSON(`${API_URL}?search=${query}`)
-    console.log(data);
 
     state.search.results = data.data.recipes.map(rec => {
       return {
@@ -51,12 +53,22 @@ export const loadSearchResults = async function(query){
       }
     })
 
-    console.log(state.search.results);
 
   }catch(err){
     console.error(`${err}`)
     throw err
   }
+}
+
+//Pagination 
+export const getSearchResultsPage = function(page = state.search.page ){
+  //state changes when a number is passed in as an argument
+  state.search.page = page 
+
+  const start = (page - 1) * state.search.resultsPerPage // if page is 1 then start = 0, if page = 2 then start = 10
+  const end = page * state.search.resultsPerPage // ends at 10 then next page ends at 20
+
+  return state.search.results.slice(start, end)
 }
 
 
