@@ -1,13 +1,10 @@
 import * as model from './model.js' //   './' = current folder
 import recipeView from './view/recipeView.js' 
+import searchView from './view/recipeView.js' 
 
 import 'core-js/stable' //polyfilling es6/anything else basically
 import 'regenerator-runtime/runtime' //polyfilling async/await
-
-
-
 // .. = parent folder. 
-const recipeContainer = document.querySelector('.recipe')
 
 
 const renderSpinner = function(parentEl){
@@ -40,7 +37,23 @@ const controlRecipes = async function(){
     recipeView.renderError()
   }
 }
+
+const controlSearchResults = async function(){
+  try{
+    const query = searchView.getQuery()
+    //guard cause
+    if (!query) return
+
+    model.loadSearchResults('pizza')
+    console.log(model.state.search.results);
+  }catch(err) {
+    console.log(err)
+  }
+}
+
+//subscriber 
 const init = function (){
   recipeView.addHandlerRender(controlRecipes)
+  searchView.addHandlerRender(controlSearchResults)
 }
 init()
