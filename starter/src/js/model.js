@@ -9,8 +9,8 @@ export const state = {
       results: [], //contains all the search results
       resultsPerPage: RES_PER_PAGE,
       page: 1,
-
-    }
+    },
+    bookmarks: []
 }
 
 //loadRecipe function only changes our state object above
@@ -18,19 +18,30 @@ export const loadRecipe = async function(id){
     try{
       
       const data = await getJSON(`${API_URL}${id}`)
+
+      console.log(data);
   
       const {recipe} = data.data
       //formatting recipe to get rid of underscores.
+
       state.recipe = {
         id: recipe.id,
         title: recipe.title,
         publisher: recipe.publisher,
         sourceUrl: recipe.source_url,
         image: recipe.image_url, //Basically a url which points to the location of the image on the Forkify API server
-        serving: recipe.servings,
+        servings: recipe.servings,
         cookingTime: recipe.cooking_time,
         ingredients: recipe.ingredients
       }
+
+      //some() == any. This will return true if any of the iterables meets the condition
+      if (state.bookmarks.some(bookmark => bookmark.id === id))
+        state.recipe.bookmark = true
+      else
+        state.recipe.bookmark = true
+
+
     }catch(err){
         console.error(`${err}💥💥💥`)
         throw err
@@ -53,6 +64,8 @@ export const loadSearchResults = async function(query){
       }
     })
 
+    state.search.page = 1
+
 
   }catch(err){
     console.error(`${err}`)
@@ -71,6 +84,34 @@ export const getSearchResultsPage = function(page = state.search.page ){
   return state.search.results.slice(start, end)
 }
 
+//Not working, reading NAN on state.recipe.ingredients
+export const updateServings = function (newServings){
+  state.recipe.ingredients.forEach(ing => {
+    // newQt = oldQt * mewServings / oldServings // (2 * 8)/4 = 4
+      ing.quantity = (ing.quantity * newServings) / state.recipe.servings
+  })
+
+  //update to new servings size of current recipe
+  state.recipe.servings = newServings
+}
+
+export const addBookMark = function(recipe){
+  //Add bookmark
+  state.bookmarks.push(recipe)
+
+  //Mark current recipe as bookmark - add new property
+  if (recipe.id === state.recipe.id) state.recipe.bookmarked = true
+
+}
+
+export const deleteBookMark = function(id){
+  //Delete bookmark
+  const index = state.bookmarks.findIndex(el => el.id === id)
+  state.bookmarks.splice(index, 1)
+
+  //Mark current recipe as NOT bookmarked 
+  if (id === state.recipe.id) state.recipe.bookmarked = false
+}
 
 
 

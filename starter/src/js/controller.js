@@ -15,17 +15,17 @@ import 'regenerator-runtime/runtime' //polyfilling async/await
 //   module.hot.accept()
 // }
 
-const renderSpinner = function(parentEl){
-  const markup = `
-    <div class="spinner">
-      <svg>
-        <use href="${icons}#icon-loader"></use>
-      </svg>
-    </div>
-  `
-  parentEl.innerHTML = ''
-  parentEl.insertAdjacentHTML('afterbegin', markup)
-}
+// const renderSpinner = function(parentEl){
+//   const markup = `
+//     <div class="spinner">
+//       <svg>
+//         <use href="${icons}#icon-loader"></use>
+//       </svg>
+//     </div>
+//   `
+//   parentEl.innerHTML = ''
+//   parentEl.insertAdjacentHTML('afterbegin', markup)
+// }
 
 const controlRecipes = async function(){
   try {
@@ -34,13 +34,16 @@ const controlRecipes = async function(){
 
     recipeView.renderSpinner()
 
+    //  0) Update results view to mark selected search results
+    resultsView.update(model.getSearchResultsPage())
+
     //  1) Loading recipe
     await model.loadRecipe(id)
 
-    // 2) Rendering recipe
+    //  2) Rendering recipe
     recipeView.render(model.state.recipe)
-    
-      
+
+
   }catch (err){
     recipeView.renderError()
   }
@@ -78,10 +81,29 @@ const controlPagination = function(goToPage){
     paginationView.render(model.state.search)
 }
 
+const controlServings = function(newServings){
+  //Update the recipe servings (in state)
+  model.updateServings(newServings)
+
+  //update the recipe view
+  // recipeView.render(model.state.recipe)
+  recipeView.update(model.state.recipe)
+}
+
+const controlAddBookmark = function(){
+  if (!model.state.recipe.bookMarked) model.addBookMark(model.state.recipe)
+  else model.deleteBookMark(model.state.recipe.id)
+  console.log(model.state.recipe);
+  recipeView.update(model.state.recipe)
+}
+
 //subscriber 
 const init = function (){
   recipeView.addHandlerRender(controlRecipes)
+  recipeView.addHandlerUpdateServings(controlServings)
+  recipeView.addHandlerAddBookmark(controlAddBookmark)
   searchView.addHandlerSearch(controlSearchResults)
   paginationView.addHandlerClick(controlPagination)
+  
 }
 init()

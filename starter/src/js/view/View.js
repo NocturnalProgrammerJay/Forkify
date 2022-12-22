@@ -16,6 +16,43 @@ export default class View {
         this._parentElement.insertAdjacentHTML("afterbegin", markup)
     }
 
+    //Create new markup instead of rendering the browser 
+    update(data){
+        this._data = data
+        const newMarkup = this._generateMarkUp() 
+
+        //create a dom object and place in memory to use. 
+        //createRange - 
+        //createContextualFragment - take a string and converts it into real DOM node objects aka virtual DOM
+        const newDOM = document.createRange().createContextualFragment(newMarkup)
+
+        //after
+        const newElements = Array.from(newDOM.querySelectorAll('*'))
+        //before
+        const curElements = Array.from(this._parentElement.querySelectorAll('*'))
+
+        //if there is a change then replace old text with the new text from the virtual DOM
+        newElements.forEach((newEl,i)=> {
+          const curEl = curElements[i]
+          //console.log(curEl , newEl.isEqualNode(curEl));//isEqualNode compares content
+
+          //Update change Text
+          if (!newEl.isEqualNode(curEl) && newEl.firstChild?.nodeValue.trim() !== ''){ //nodeValue - does context contain text?
+
+            curEl.textContent = newEl.textContent
+          }
+
+          //Update changed attributes
+          if (!newEl.isEqualNode(curEl)){
+            //console.log(newEl.attributes); //this will show as NamedNodeMap in the console.
+            Array.from(newEl.attributes).forEach(attr =>
+              //replacing the curEl attributes to the new attributes
+               curEl.setAttribute(attr.name, attr.value))
+          }
+        })
+    }
+
+
     _clear(){
         this._parentElement.innerHTML = ''
     }
