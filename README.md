@@ -1,4 +1,4 @@
-# Forkify - Recipe ingredients website application.
+# Forkify - Recipe ingredients website.
 ## OOP, MVC, web APIs, and asynchronous application. Udemy Fall 2022
 
 #### Instructions:
