@@ -1,8 +1,8 @@
 # Forkify - Recipe ingredients website.
-## OOP, MVC, web APIs, and asynchronous application. Udemy Fall 2022
+## OOP, MVC, web APIs, babel, node_package, and asynchronous application. Udemy Fall 2022
 
 #### Instructions:
-1. Download or git clonse repo
+1. Download or git clone repo
 2. Open repo in IDE. eg: vscode
 3. open node or bash in the terminal 
 4. type 'npm install' + enter then type 'npm start' + enter
