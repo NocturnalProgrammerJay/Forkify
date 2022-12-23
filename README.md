@@ -1,5 +1,5 @@
-# Forkify - Recipe ingredients website application. Udemy Fall 2022
-## OOP, MVC, web APIs, and asynchronous application.
+# Forkify - Recipe ingredients website application.
+## OOP, MVC, web APIs, and asynchronous application. Udemy Fall 2022
 
 #### Instructions:
 1. Download or git clonse repo
