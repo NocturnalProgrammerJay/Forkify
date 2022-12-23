@@ -37,9 +37,9 @@ export const loadRecipe = async function(id){
 
       //some() == any. This will return true if any of the iterables meets the condition
       if (state.bookmarks.some(bookmark => bookmark.id === id))
-        state.recipe.bookmark = true
+        state.recipe.bookmarked = true
       else
-        state.recipe.bookmark = true
+        state.recipe.bookmarked = false
 
 
     }catch(err){
@@ -95,12 +95,22 @@ export const updateServings = function (newServings){
   state.recipe.servings = newServings
 }
 
+const persistBookmarks = function(){
+  //Add bookmark
+  //state.bookmarks.push(recipe)
+
+  //Mark current recipe as bookmarked
+  localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks))
+}
+
 export const addBookMark = function(recipe){
   //Add bookmark
   state.bookmarks.push(recipe)
 
   //Mark current recipe as bookmark - add new property
   if (recipe.id === state.recipe.id) state.recipe.bookmarked = true
+
+  persistBookmarks()
 
 }
 
@@ -111,7 +121,21 @@ export const deleteBookMark = function(id){
 
   //Mark current recipe as NOT bookmarked 
   if (id === state.recipe.id) state.recipe.bookmarked = false
+
+  persistBookmarks()
 }
+
+const init = function(){
+  const storage = localStorage.getItem('bookmarks')
+  if (storage) state.bookmarks = JSON.parse(storage)
+}
+
+init()
+
+const clearBookmarks = function(){
+  localStorage.clear('bookmarks')
+}
+//clearBookmarks()
 
 
 

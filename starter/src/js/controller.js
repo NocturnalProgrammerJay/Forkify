@@ -3,6 +3,7 @@ import recipeView from './view/recipeView.js'
 import searchView from './view/searchView.js' 
 import resultsView from './view/resultsView.js' 
 import paginationView from './view/paginationView.js' 
+import bookmarksView from './view/bookmarksView.js' 
 
 import 'core-js/stable' //polyfilling es6/anything else basically
 import 'regenerator-runtime/runtime' //polyfilling async/await
@@ -36,16 +37,20 @@ const controlRecipes = async function(){
 
     //  0) Update results view to mark selected search results
     resultsView.update(model.getSearchResultsPage())
+    
+    //  1) updating bookmarks view
+    bookmarksView.update(model.state.bookmarks)
 
-    //  1) Loading recipe
+    //  2) Loading recipe
     await model.loadRecipe(id)
-
-    //  2) Rendering recipe
+    
+    //  3) Rendering recipe
     recipeView.render(model.state.recipe)
-
-
+    
+    
   }catch (err){
     recipeView.renderError()
+    console.error(err)
   }
 }
 
@@ -91,14 +96,24 @@ const controlServings = function(newServings){
 }
 
 const controlAddBookmark = function(){
-  if (!model.state.recipe.bookMarked) model.addBookMark(model.state.recipe)
+  //  1) Add/remove bookmark
+  if (!model.state.recipe.bookmarked) model.addBookMark(model.state.recipe)
   else model.deleteBookMark(model.state.recipe.id)
-  console.log(model.state.recipe);
+
+  //  2) Update recipe view
   recipeView.update(model.state.recipe)
+
+  //  3) Render bookmarks
+  bookmarksView.render(model.state.bookmarks)
+}
+
+const controlBookmarks = function(){
+  bookmarksView.render(model.state.bookmarks)
 }
 
 //subscriber 
 const init = function (){
+  bookmarksView.addHandlerRender(controlBookmarks)
   recipeView.addHandlerRender(controlRecipes)
   recipeView.addHandlerUpdateServings(controlServings)
   recipeView.addHandlerAddBookmark(controlAddBookmark)

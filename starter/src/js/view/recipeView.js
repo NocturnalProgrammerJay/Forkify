@@ -39,7 +39,7 @@ class RecipeView extends View {
       })
     }
 
-    _generateMarkUp(){
+    _generateMarkup(){
         //console.log(this._data.ingredients);
         return `
         <figure class="recipe__fig">

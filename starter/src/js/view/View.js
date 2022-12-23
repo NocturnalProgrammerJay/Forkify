@@ -4,13 +4,16 @@ import icons from 'url:../../img/icons.svg'
 export default class View {
     _data
     
-    render(data){
+    render(data, render = true){
         //Array.isArray(data) - checks type and if length is 0 
         if (!data || (Array.isArray(data) && data.length === 0 )) 
             return this.renderError()
 
         this._data = data
-        const markup = this._generateMarkUp() 
+        const markup = this._generateMarkup() 
+
+        if(!render) return markup
+
         this._clear()
         //places list of elements in the DOM off of API array 
         this._parentElement.insertAdjacentHTML("afterbegin", markup)
@@ -19,7 +22,7 @@ export default class View {
     //Create new markup instead of rendering the browser 
     update(data){
         this._data = data
-        const newMarkup = this._generateMarkUp() 
+        const newMarkup = this._generateMarkup() 
 
         //create a dom object and place in memory to use. 
         //createRange - 
